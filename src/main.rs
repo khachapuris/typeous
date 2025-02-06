@@ -2,12 +2,17 @@ use std::io;
 use std::time::Instant;
 
 fn main() {
-    let now = Instant::now();
-
+    println!("Press Enter to start:");
     let mut input_text = String::new();
     io::stdin().read_line(&mut input_text).unwrap();
+    let now = Instant::now();
 
-    let elapsed = now.elapsed();
-    println!("Elapsed: {:.2?}", elapsed);
-    println!("Text: {}", input_text);
+    io::stdin().read_line(&mut input_text).unwrap();
+
+    let elapsed = now.elapsed().as_millis();
+    let length = input_text.chars().count();
+    let speed = length * 12000 / (elapsed as usize);
+    println!("Length: {}", length);
+    println!("Elapsed: {} ms", elapsed);
+    println!("Speed: {} wpm", speed);
 }
