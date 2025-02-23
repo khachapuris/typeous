@@ -21,31 +21,53 @@ fn read_file(output: &mut String) {
 fn main() {
     let stdin = io::stdin();
     let mut discard_input = String::new();
-    let mut first_text = String::new();
-    read_file(&mut first_text);
-    println!("{}", first_text);
+    let mut original = String::new();
+    read_file(&mut original);
+    println!();
+    println!("{}", original);
 
-    let mut second_text = String::new();
-    print!("Now retype this text as fast as you can! (press enter to start):");
+    let mut text = String::new();
+    print!("Type this text as fast as you can! (press enter to start):");
     flush();
     stdin.read_line(&mut discard_input).expect("input failed!");
+    println!();
     let now = Instant::now();
-    for _ in first_text.lines() {
-        print!("> ");
-        flush();
-        stdin.read_line(&mut second_text).expect("input failed!");
+    for _ in original.lines() {
+        stdin.read_line(&mut text).expect("input failed!");
     }
 
     let elapsed = now.elapsed().as_millis();
-    let length = second_text.chars().count() - 2;
+    let length = text.chars().count() - 2;
     let speed = length * 12000 / (elapsed as usize);
+    let mut errors = 0;
     println!();
-
-    if first_text == second_text {
-        println!("All correct!");
-    } else {
-        println!("Incorrect.");
+    let mut b = 0;
+    for a in 0..text.split_whitespace().count() {
+        let original_word = original.split_whitespace().nth(b);
+        let original_next = original.split_whitespace().nth(b + 1);
+        let word = text.split_whitespace().nth(a);
+        let word_next = text.split_whitespace().nth(a + 1);
+        if word == original_word {
+            // Everything is ok
+        } else if word_next == original_next {
+            println!("{} != {}", word.unwrap(), original_word.unwrap());
+            // There is a typo in the word
+            errors += 1;
+        } else if word == original_next {
+            println!("- {}", original_word.unwrap());
+            errors += 1;
+            b += 1;
+        } else if word_next == original_word {
+            println!("+ {}", word.unwrap());
+            errors += 1;
+            b -= 1;
+        } else {
+            errors += 1;
+        };
+        b += 1;
     }
+
+    println!("Errors: {}", errors);
     println!("Length: {}", length);
     println!("Elapsed: {} ms", elapsed);
     println!("Speed: {} wpm", speed);
