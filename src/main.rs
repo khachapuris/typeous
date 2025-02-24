@@ -46,7 +46,8 @@ fn nth_word(string: &String, n: usize) -> &str {
 fn print_errors(original: &String, text: &String) {
 
     println!();
-    println!("Errors:");
+    println!("Errors");
+    println!("------");
 
     let mut errors = 0;
     let mut b = 0;
@@ -82,6 +83,8 @@ fn print_speed(text: &String, elapsed: usize) {
     let length = text.chars().count() - 2;
     let speed = length * 12000 / (elapsed as usize);
     println!();
+    println!("Statistics");
+    println!("----------");
     println!("Length: {}", length);
     println!("Elapsed: {} ms", elapsed);
     println!("Speed: {} wpm", speed);
