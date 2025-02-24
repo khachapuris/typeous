@@ -1,23 +1,41 @@
 use std::io;
 use std::time::Instant;
+use std::process;
 use std::env;
 use std::fs;
 
-fn flush() {
-    io::Write::flush(&mut io::stdout()).expect("flush failed!");
-}
-
-fn read_file(output: &mut String) {
+/// Get the file name from the command line arguments
+/// and return the contents of the file
+fn read_file() -> String {
     let args: Vec<String> = env::args().collect();
     if args.len() < 2 {
-        panic!("Not enough arguments");
-    }
-
+        eprintln!("Not enough arguments");
+        process::exit(1);
+    };
     let file_path = &args[1];
-    *output = fs::read_to_string(file_path)
-        .expect("Should have been able to read the file");
+    fs::read_to_string(file_path)
+        .expect("Should have been able to read the file")
 }
 
+fn play(original: &String) -> (String, usize) {
+    let stdin = io::stdin();
+    let mut discard_input = String::new();
+    let mut text = String::new();
+
+    println!();
+    println!("{}", original);
+    println!("Type this text as fast as you can! (press enter to start):");
+    stdin.read_line(&mut discard_input).expect("input failed!");
+    let now = Instant::now();
+    for _ in original.lines() {
+        stdin.read_line(&mut text).expect("input failed!");
+    };
+    let elapsed = now.elapsed().as_millis();
+    (text, elapsed as usize)
+}
+
+/// Return the nth word of the string if it exists;
+/// otherwise return an empty string
 fn nth_word(string: &String, n: usize) -> &str {
     match string.split_whitespace().nth(n) {
         Some(w) => w,
@@ -25,7 +43,11 @@ fn nth_word(string: &String, n: usize) -> &str {
     }
 }
 
-fn find_errors(original: &String, text: &String) -> usize {
+fn print_errors(original: &String, text: &String) {
+
+    println!();
+    println!("Errors:");
+
     let mut errors = 0;
     let mut b = 0;
     for a in 0..text.split_whitespace().count() {
@@ -53,38 +75,21 @@ fn find_errors(original: &String, text: &String) -> usize {
         };
         b += 1;
     };
-    errors
+    println!("Total: {}", errors);
 }
 
-fn main() {
-    let stdin = io::stdin();
-    let mut discard_input = String::new();
-    let mut original = String::new();
-    read_file(&mut original);
-    println!();
-    println!("{}", original);
-
-    let mut text = String::new();
-    print!("Type this text as fast as you can! (press enter to start):");
-    flush();
-    stdin.read_line(&mut discard_input).expect("input failed!");
-    println!();
-    let now = Instant::now();
-    for _ in original.lines() {
-        stdin.read_line(&mut text).expect("input failed!");
-    }
-
-    let elapsed = now.elapsed().as_millis();
+fn print_speed(text: &String, elapsed: usize) {
     let length = text.chars().count() - 2;
     let speed = length * 12000 / (elapsed as usize);
-
-    println!();
-    println!("Errors:");
-    let errors = find_errors(&original, &text);
-
-    println!("Total: {}", errors);
     println!();
     println!("Length: {}", length);
     println!("Elapsed: {} ms", elapsed);
     println!("Speed: {} wpm", speed);
+}
+
+fn main() {
+    let original = read_file();
+    let (text, elapsed) = play(&original);
+    print_errors(&original, &text);
+    print_speed(&text, elapsed);
 }
