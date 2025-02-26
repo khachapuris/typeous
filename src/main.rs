@@ -4,6 +4,19 @@ use std::process;
 use std::env;
 use std::fs;
 
+use serde::Deserialize;
+use serde_yaml::{self};
+
+#[derive(Debug, Deserialize)]
+struct Config {
+    wpm: bool,
+    cpm: bool,
+    seconds: bool,
+    millis: bool,
+    words: bool,
+    chars: bool,
+}
+
 /// Get the file name from the command line arguments
 /// and return the contents of the file
 fn read_file() -> String {
@@ -15,6 +28,12 @@ fn read_file() -> String {
     let file_path = &args[1];
     fs::read_to_string(file_path)
         .expect("Should have been able to read the file")
+}
+
+fn load_config() -> Config {
+    let file = fs::File::open("config.yaml")
+        .expect("Could not open the config file.");
+    serde_yaml::from_reader(file).expect("Could not read config.")
 }
 
 fn play(original: &String) -> (String, usize) {
@@ -81,16 +100,21 @@ fn print_errors(original: &String, text: &String) {
 
 fn print_speed(text: &String, elapsed: usize) {
     let length = text.chars().count() - 2;
-    let speed = length * 12000 / (elapsed as usize);
+    let wpm = length * 12000 / (elapsed as usize);
+    let cpm = length * 60000 / (elapsed as usize);
     println!();
     println!("Statistics");
     println!("----------");
-    println!("Length: {}", length);
+    println!("Characters: {}", length);
+    println!("Words: {}", text.split_whitespace().count());
     println!("Elapsed: {} ms", elapsed);
-    println!("Speed: {} wpm", speed);
+    println!("Speed: {} wpm", wpm);
+    println!("Speed: {} cpm", cpm);
 }
 
 fn main() {
+    let config = load_config();
+    println!("{:?}", config);
     let original = read_file();
     let (text, elapsed) = play(&original);
     print_errors(&original, &text);

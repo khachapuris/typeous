@@ -1,0 +1,6 @@
+wpm: true
+cpm: false
+seconds: false
+millis: true
+words: false
+chars: true
