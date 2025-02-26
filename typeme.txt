@@ -1,8 +1,1 @@
-use std::io;
-use std::time::Instant;
-use std::process;
-use std::env;
-use std::fs;
-
-/// Get the file name from the command line arguments
-/// and return the contents of the file
+The quick brown fox jumps over the lazy dog.

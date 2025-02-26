@@ -1,6 +1,7 @@
-wpm: true
-cpm: false
-seconds: false
-millis: true
-words: false
-chars: true
+statistics:
+  - chars
+  - words
+  - millis
+  - seconds
+  - cpm
+  - wpm

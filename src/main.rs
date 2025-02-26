@@ -9,12 +9,7 @@ use serde_yaml::{self};
 
 #[derive(Debug, Deserialize)]
 struct Config {
-    wpm: bool,
-    cpm: bool,
-    seconds: bool,
-    millis: bool,
-    words: bool,
-    chars: bool,
+    statistics: Vec<String>,
 }
 
 /// Get the file name from the command line arguments
@@ -98,18 +93,24 @@ fn print_errors(original: &String, text: &String) {
     println!("Total: {}", errors);
 }
 
-fn print_speed(text: &String, elapsed: usize) {
+fn print_speed(text: &String, elapsed: usize, config: &Config) {
     let length = text.chars().count() - 2;
     let wpm = length * 12000 / (elapsed as usize);
     let cpm = length * 60000 / (elapsed as usize);
     println!();
     println!("Statistics");
     println!("----------");
-    println!("Characters: {}", length);
-    println!("Words: {}", text.split_whitespace().count());
-    println!("Elapsed: {} ms", elapsed);
-    println!("Speed: {} wpm", wpm);
-    println!("Speed: {} cpm", cpm);
+    for option in &config.statistics {
+        match option.as_str() {
+            "chars" => println!("Characters: {}", length),
+            "words" => println!("Words: {}", text.split_whitespace().count()),
+            "millis" => println!("Elapsed: {} s", elapsed),
+            "seconds" => println!("Elapsed: {} ms", elapsed / 1000),
+            "cpm" => println!("Speed: {} cpm", cpm),
+            "wpm" => println!("Speed: {} wpm", wpm),
+            option => println!("Unknown option: {}", option),
+        }
+    }
 }
 
 fn main() {
@@ -118,5 +119,5 @@ fn main() {
     let original = read_file();
     let (text, elapsed) = play(&original);
     print_errors(&original, &text);
-    print_speed(&text, elapsed);
+    print_speed(&text, elapsed, &config);
 }
