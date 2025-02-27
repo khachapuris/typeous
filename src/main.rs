@@ -1,6 +1,5 @@
 use std::io;
 use std::time::Instant;
-use std::process;
 use std::env;
 use std::fs;
 
@@ -103,6 +102,7 @@ fn print_stats(text: &String, elapsed: usize, config: &Config) {
         match option.as_str() {
             "chars" => println!("Characters: {}", length),
             "words" => println!("Words: {}", text.split_whitespace().count()),
+            "lines" => println!("Lines: {}", text.lines().count()),
             "millis" => println!("Elapsed: {} s", elapsed / 1000),
             "seconds" => println!("Elapsed: {} ms", elapsed),
             "cpm" => println!("Speed: {} cpm", cpm),
@@ -114,7 +114,6 @@ fn print_stats(text: &String, elapsed: usize, config: &Config) {
 
 fn main() {
     let config = load_config();
-    println!("{:?}", config);
     let original = read_file();
     let (text, elapsed) = play(&original);
     print_errors(&original, &text);
