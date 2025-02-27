@@ -1,8 +1,5 @@
 statistics:
   - chars
   - words
-  - lines
-  - millis
   - seconds
-  - cpm
   - wpm
