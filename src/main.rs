@@ -16,11 +16,10 @@ struct Config {
 /// and return the contents of the file
 fn read_file() -> String {
     let args: Vec<String> = env::args().collect();
-    if args.len() < 2 {
-        eprintln!("Not enough arguments");
-        process::exit(1);
+    let mut file_path = "typefile.txt";
+    if args.len() >= 2 {
+        file_path = &args[1];
     };
-    let file_path = &args[1];
     fs::read_to_string(file_path)
         .expect("Should have been able to read the file")
 }
@@ -93,7 +92,7 @@ fn print_errors(original: &String, text: &String) {
     println!("Total: {}", errors);
 }
 
-fn print_speed(text: &String, elapsed: usize, config: &Config) {
+fn print_stats(text: &String, elapsed: usize, config: &Config) {
     let length = text.chars().count() - 2;
     let wpm = length * 12000 / (elapsed as usize);
     let cpm = length * 60000 / (elapsed as usize);
@@ -104,8 +103,8 @@ fn print_speed(text: &String, elapsed: usize, config: &Config) {
         match option.as_str() {
             "chars" => println!("Characters: {}", length),
             "words" => println!("Words: {}", text.split_whitespace().count()),
-            "millis" => println!("Elapsed: {} s", elapsed),
-            "seconds" => println!("Elapsed: {} ms", elapsed / 1000),
+            "millis" => println!("Elapsed: {} s", elapsed / 1000),
+            "seconds" => println!("Elapsed: {} ms", elapsed),
             "cpm" => println!("Speed: {} cpm", cpm),
             "wpm" => println!("Speed: {} wpm", wpm),
             option => println!("Unknown option: {}", option),
@@ -119,5 +118,5 @@ fn main() {
     let original = read_file();
     let (text, elapsed) = play(&original);
     print_errors(&original, &text);
-    print_speed(&text, elapsed, &config);
+    print_stats(&text, elapsed, &config);
 }
