@@ -3,6 +3,8 @@ Typeous
 
 Typeous is a minimalistic command line typing tool written in Rust.
 
+[![asciicast](https://asciinema.org/a/ZQD1QpklHsOcwIK4lhhP2lHk7.png)](https://asciinema.org/a/ZQD1QpklHsOcwIK4lhhP2lHk7)
+
 Installation
 ------------
 
