@@ -1,4 +1,4 @@
-{"version":2,"width":189,"height":49,"timestamp":1740649798,"env":{"TERM":"xterm-256color","SHELL":"/bin/bash"},"theme":{"fg":"#cccccc","bg":"#1d2021","palette":"#000000:#b21818:#18b218:#b26818:#1818b2:#b218b2:#18b2b2:#b2b2b2:#686868:#ff5454:#54ff54:#ffff54:#5454ff:#ff54ff:#54ffff:#ffffff"}}
+{"version":2,"width":80,"height":26,"timestamp":1740649798,"env":{"TERM":"xterm-256color","SHELL":"/bin/bash"},"theme":{"fg":"#cccccc","bg":"#1d2021","palette":"#000000:#b21818:#18b218:#b26818:#1818b2:#b218b2:#18b2b2:#b2b2b2:#686868:#ff5454:#54ff54:#ffff54:#5454ff:#ff54ff:#54ffff:#ffffff"}}
 [0.010318, "o", "\u001b]0;user@host:~/Programs/Rust/typeous\u0007"]
 [0.010637, "o", "\u001b[?2004h"]
 [0.010646, "o", "\u001b[1;32m(user:host \u001b[1;36mtypeous\u001b[1;32m)$\u001b[0m "]
