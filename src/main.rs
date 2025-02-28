@@ -1,32 +1,58 @@
 use std::io;
 use std::time::Instant;
-use std::env;
 use std::fs;
+use dirs;
 
-use serde::Deserialize;
+use serde::{Serialize, Deserialize};
 use serde_yaml::{self};
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 struct Config {
     statistics: Vec<String>,
 }
 
-/// Get the file name from the command line arguments
-/// and return the contents of the file
+impl Default for Config {
+    fn default() -> Config {
+        Config { statistics: vec![
+            String::from("wpm"),
+        ] }
+    }
+}
+
 fn read_file() -> String {
-    let args: Vec<String> = env::args().collect();
-    let mut file_path = "typefile.txt";
-    if args.len() >= 2 {
-        file_path = &args[1];
-    };
-    fs::read_to_string(file_path)
-        .expect("Should have been able to read the file")
+    let mut text_path = dirs::home_dir()
+        .expect("Did not find the home directory");
+    text_path.push("typeous.txt");
+    let text_path = text_path.as_path();
+    if text_path.exists() {
+        fs::read_to_string(text_path)
+            .expect("Should have been able to read typeous.txt")
+    } else {
+        "Brown jars prevented the mixture
+from freezing too quickly.\n".to_string()
+    }
 }
 
 fn load_config() -> Config {
-    let file = fs::File::open("config.yaml")
-        .expect("Could not open the config file.");
-    serde_yaml::from_reader(file).expect("Could not read config.")
+    let mut path = dirs::config_dir()
+        .expect("Did not find the config directory");
+    path.push("typeous");
+    path.push("config.yaml");
+    let path = path.as_path();
+    if path.exists() {
+        let content = fs::read_to_string(path)
+            .expect("Should have been able to read the config file");
+        serde_yaml::from_str(&content)
+            .expect("Invalid YAML in configuration file")
+    } else {
+        let default_config = Config::default();
+        let yaml = serde_yaml::to_string(&default_config).unwrap();
+        let prefix = path.parent().unwrap();
+        fs::create_dir_all(prefix).unwrap();
+        fs::write(path, yaml)
+            .expect("Should have been able to create config file");
+        default_config
+    }
 }
 
 fn play(original: &String) -> (String, usize) {
