@@ -17,19 +17,18 @@ Installation
 Usage
 -----
 
-1. Find the text you want to practice on and copy it to `typefile.txt`.
+1. Create a file called `typeous.txt` in your home directory
+1. Find the text you want to practice on and copy it to `typeous.txt`.
 2. Run typeous with `cargo run`
 3. Touch type the text
 4. See the statistics
 
-If you want to type the text from a file, run
-`cargo run -- the/file/path/to/your/file`
-
 Configuration
 -------------
 
-You can edit the statistics report to show only the information you want.
-To do that go to `config.yaml` and edit the `statistics` list.
+You can edit the statistics report to show the information you want.
+To do that go to `typeous/config.yaml` in your config directory
+(`.config` for Linux) and edit the `statistics` list.
 
 The available options are:
 
@@ -40,3 +39,5 @@ The available options are:
 - `seconds`, time in seconds
 - `cpm`, speed in characters per minute
 - `wpm`, speed in words per minute
+
+If you are not sure where is the `config.yaml` file, run `cargo run -- --help`.

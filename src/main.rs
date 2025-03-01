@@ -2,6 +2,7 @@ use std::io;
 use std::time::Instant;
 use std::fs;
 use dirs;
+use std::env;
 
 use serde::{Serialize, Deserialize};
 use serde_yaml::{self};
@@ -52,6 +53,36 @@ fn load_config() -> Config {
         fs::write(path, yaml)
             .expect("Should have been able to create config file");
         default_config
+    }
+}
+
+fn print_help() {
+    let app_name = env::args().nth(0).unwrap();
+    match env::args().nth(1) {
+        Some(help) if help == String::from("-h")
+        || help == String::from("--help") => {
+            let mut path = dirs::config_dir()
+                .expect("Did not find the config directory");
+            path.push("typeous");
+            path.push("config.yaml");
+            let path = path.as_path();
+            println!("Usage: {} [-h | --help]", app_name);
+            println!("Practice touch typing with the text from typeous.txt");
+            println!("in your home directory.");
+            println!();
+            println!("Help options:");
+            println!("  -h, --help    display this help and exit");
+            println!();
+            println!("The configuration is stored in {}", path.display());
+
+            std::process::exit(0);
+        }
+        Some(x) => {
+            eprintln!("Unknown option: {}", x);
+            eprintln!("See {} --help for a full list of options", app_name);
+            std::process::exit(1);
+        }
+        None => {}
     }
 }
 
@@ -139,6 +170,7 @@ fn print_stats(text: &String, elapsed: usize, config: &Config) {
 }
 
 fn main() {
+    print_help();
     let config = load_config();
     let original = read_file();
     let (text, elapsed) = play(&original);
