@@ -23,11 +23,11 @@ impl Default for Config {
 fn read_file() -> String {
     let mut text_path = dirs::home_dir()
         .expect("Did not find the home directory");
-    text_path.push("typeous.txt");
+    text_path.push("typeme.txt");
     let text_path = text_path.as_path();
     if text_path.exists() {
         fs::read_to_string(text_path)
-            .expect("Should have been able to read typeous.txt")
+            .expect("Should have been able to read typeme.txt")
     } else {
         "Brown jars prevented the mixture
 from freezing too quickly.\n".to_string()
@@ -67,7 +67,7 @@ fn print_help() {
             path.push("config.yaml");
             let path = path.as_path();
             println!("Usage: {} [-h | --help]", app_name);
-            println!("Practice touch typing with the text from typeous.txt");
+            println!("Practice touch typing with the text from typeme.txt");
             println!("in your home directory.");
             println!();
             println!("Help options:");

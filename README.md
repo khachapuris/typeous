@@ -17,8 +17,8 @@ Installation
 Usage
 -----
 
-1. Create a file called `typeous.txt` in your home directory
-1. Find the text you want to practice on and copy it to `typeous.txt`.
+1. Create a file called `typeme.txt` in your home directory
+1. Find the text you want to practice on and copy it to `typeme.txt`.
 2. Run typeous with `cargo run`
 3. Touch type the text
 4. See the statistics
