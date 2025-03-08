@@ -118,11 +118,17 @@ fn print_errors(original: &String, text: &String) {
     println!("Errors");
     println!("------");
 
+    let original = original.replace('“', "\"")
+        .replace('”', "\"")
+        .replace('‘', "'")
+        .replace('’', "'")
+        .replace('—', "-")
+        .replace('–', "-");
     let mut errors = 0;
     let mut b = 0;
     for a in 0..text.split_whitespace().count() {
-        let original_word = nth_word(original, b);
-        let original_next = nth_word(original, b + 1);
+        let original_word = nth_word(&original, b);
+        let original_next = nth_word(&original, b + 1);
         let word = nth_word(text, a);
         let word_next = nth_word(text, a + 1);
         if word == original_word {
